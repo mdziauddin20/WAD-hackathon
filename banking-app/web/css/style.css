@@ -1,0 +1,509 @@
+/* ============================================================
+   NexaBank – style.css
+   Custom styles complementing Tailwind CSS.
+   Dark fintech theme: Navy-slate, Emerald, Crimson.
+   ============================================================ */
+
+/* ── Global ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+/* ── Custom scrollbar ── */
+.custom-scroll::-webkit-scrollbar { width: 4px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ─────────────────────────────────────────────────────────────
+   GLASS SURFACES
+───────────────────────────────────────────────────────────── */
+.sidebar-glass {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.topbar-glass {
+  background: rgba(15, 23, 42, 0.90);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.card-glass {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card-glass:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HERO CARD
+───────────────────────────────────────────────────────────── */
+.hero-card {
+  background: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(139,92,246,0.08) 60%, rgba(30,41,59,0.6) 100%);
+  border: 1px solid rgba(16,185,129,0.18);
+}
+.hero-glow-orb {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(16,185,129,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SIDEBAR NAV LINKS
+───────────────────────────────────────────────────────────── */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  transition: color 0.18s, background 0.18s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav-link:hover {
+  color: #f1f5f9;
+  background: rgba(255,255,255,0.05);
+}
+.nav-link.active {
+  color: #10b981;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.15);
+}
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ACCOUNT CARDS (colourful bankcard style)
+───────────────────────────────────────────────────────────── */
+.account-card {
+  border-radius: 20px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  cursor: default;
+}
+.account-card:hover {
+  transform: translateY(-3px);
+}
+.account-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  pointer-events: none;
+}
+.account-card::after {
+  content: '';
+  position: absolute;
+  bottom: -50px;
+  left: -20px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+.account-card.checking {
+  background: linear-gradient(135deg, #0f4c81 0%, #1a6bad 100%);
+  box-shadow: 0 8px 32px rgba(15,76,129,0.4);
+}
+.account-card.savings {
+  background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+  box-shadow: 0 8px 32px rgba(6,78,59,0.4);
+}
+.account-card.credit {
+  background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+  box-shadow: 0 8px 32px rgba(76,29,149,0.4);
+}
+.account-card.default-card {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TRANSACTION TABLE
+───────────────────────────────────────────────────────────── */
+.th-cell {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  white-space: nowrap;
+}
+.td-cell {
+  padding: 13px 16px;
+  font-size: 13.5px;
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+}
+.tx-table-row {
+  transition: background 0.15s;
+}
+.tx-table-row:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* Category badges */
+.cat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.cat-salary       { background:rgba(16,185,129,.12); color:#34d399; border-color:rgba(16,185,129,.25); }
+.cat-food         { background:rgba(251,191,36,.10); color:#fbbf24; border-color:rgba(251,191,36,.25); }
+.cat-rent         { background:rgba(239,68,68,.12);  color:#f87171; border-color:rgba(239,68,68,.25);  }
+.cat-utilities    { background:rgba(59,130,246,.12); color:#60a5fa; border-color:rgba(59,130,246,.25); }
+.cat-shopping     { background:rgba(236,72,153,.12); color:#f472b6; border-color:rgba(236,72,153,.25); }
+.cat-transport    { background:rgba(249,115,22,.12); color:#fb923c; border-color:rgba(249,115,22,.25); }
+.cat-entertainment{ background:rgba(168,85,247,.12); color:#c084fc; border-color:rgba(168,85,247,.25); }
+.cat-healthcare   { background:rgba(20,184,166,.12); color:#2dd4bf; border-color:rgba(20,184,166,.25); }
+.cat-freelance    { background:rgba(99,102,241,.12); color:#818cf8; border-color:rgba(99,102,241,.25); }
+.cat-interest     { background:rgba(16,185,129,.12); color:#34d399; border-color:rgba(16,185,129,.25); }
+.cat-transfer     { background:rgba(148,163,184,.10);color:#94a3b8; border-color:rgba(148,163,184,.2); }
+.cat-default      { background:rgba(100,116,139,.10);color:#94a3b8; border-color:rgba(100,116,139,.2); }
+
+/* ─────────────────────────────────────────────────────────────
+   TRANSACTION FILTER TABS
+───────────────────────────────────────────────────────────── */
+.tx-filter-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #64748b;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.tx-filter-btn:hover { color: #f1f5f9; }
+.tx-filter-btn.active {
+  color: #f1f5f9;
+  background: #1e293b;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   INPUTS & SELECTS
+───────────────────────────────────────────────────────────── */
+.input-dark {
+  background: rgba(15,23,42,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #f1f5f9;
+  padding: 9px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  width: 100%;
+}
+.input-dark::placeholder { color: #475569; }
+.input-dark:focus {
+  border-color: rgba(16,185,129,0.5);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+}
+
+.select-dark {
+  background: rgba(15,23,42,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: #f1f5f9;
+  padding: 9px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.18s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 34px;
+}
+.select-dark option { background: #1e293b; }
+.select-dark:focus { border-color: rgba(16,185,129,0.5); }
+
+.form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TRANSFER MODAL
+───────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(2, 6, 23, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+.modal-overlay.hidden { display: none !important; }
+
+.modal-panel {
+  background: #1e293b;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 28px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+  animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TOAST NOTIFICATIONS
+───────────────────────────────────────────────────────────── */
+.toast {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  max-width: 340px;
+  backdrop-filter: blur(12px);
+  animation: toastIn 0.3s cubic-bezier(0.4,0,0.2,1);
+  border: 1px solid;
+}
+.toast-success {
+  background: rgba(6,78,59,0.9);
+  color: #34d399;
+  border-color: rgba(16,185,129,0.3);
+}
+.toast-error {
+  background: rgba(127,29,29,0.9);
+  color: #f87171;
+  border-color: rgba(239,68,68,0.3);
+}
+.toast-info {
+  background: rgba(15,23,42,0.95);
+  color: #94a3b8;
+  border-color: rgba(255,255,255,0.1);
+}
+.toast-out {
+  animation: toastOut 0.3s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(30px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(30px) scale(0.95); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SKELETON LOADERS
+───────────────────────────────────────────────────────────── */
+.skeleton-card {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+.skeleton-row {
+  height: 52px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.03) 0%,
+    rgba(255,255,255,0.07) 50%,
+    rgba(255,255,255,0.03) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TOGGLE BUTTON
+───────────────────────────────────────────────────────────── */
+.toggle-btn {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: 99px;
+  border: none;
+  background: #334155;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.toggle-btn::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.2s;
+}
+.toggle-btn.active {
+  background: #10b981;
+}
+.toggle-btn.active::after {
+  transform: translateX(18px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DOUGHNUT LEGEND
+───────────────────────────────────────────────────────────── */
+.legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PAGE SECTIONS
+───────────────────────────────────────────────────────────── */
+.page-section { display: block; }
+.page-section.hidden { display: none !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   RECENT TX ROW (dashboard)
+───────────────────────────────────────────────────────────── */
+.recent-tx-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: opacity 0.15s;
+}
+.recent-tx-row:last-child { border-bottom: none; }
+.tx-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SAVINGS RATE RING
+───────────────────────────────────────────────────────────── */
+.savings-ring { overflow: visible; }
+
+/* ─────────────────────────────────────────────────────────────
+   SPEND BARS (analytics)
+───────────────────────────────────────────────────────────── */
+.spend-bar-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 70px;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+.spend-bar-track {
+  height: 7px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.spend-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BALANCE HIDDEN STATE
+───────────────────────────────────────────────────────────── */
+.balance-hidden .balance-value {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #sidebar {
+    position: fixed;
+    left: -260px;
+    top: 0;
+    height: 100vh;
+    z-index: 50;
+    transition: left 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  #sidebar.open { left: 0; }
+}

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NexaBank – Centralized Online Banking Dashboard. Manage all your accounts, transactions and transfers in one place." />
+  <title>NexaBank – Banking Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN (v3 Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            navy:    { 950: '#020617', 900: '#0f172a', 800: '#1e293b', 700: '#334155', 600: '#475569' },
+            emerald: { 400: '#34d399', 500: '#10b981', 600: '#059669' },
+            crimson: { 400: '#f87171', 500: '#ef4444', 600: '#dc2626' },
+            amber:   { 400: '#fbbf24', 500: '#f59e0b' },
+            violet:  { 400: '#a78bfa', 500: '#8b5cf6' },
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-navy-900 text-slate-100 font-sans antialiased overflow-hidden">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     APP SHELL
+═══════════════════════════════════════════════════════════════ -->
+<div class="flex h-screen">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside id="sidebar"
+    class="sidebar-glass w-64 flex-shrink-0 flex flex-col h-full border-r border-navy-800 z-40 transition-all duration-300">
+
+    <!-- Brand -->
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-navy-800">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-violet-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h10M3 18h10" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-base font-bold tracking-tight text-white">NexaBank</div>
+        <div class="text-xs text-slate-500">Personal Finance</div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <div class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 px-3 mb-3">Main Menu</div>
+
+      <a href="#" class="nav-link active" data-section="dashboard" id="nav-dashboard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-link" data-section="accounts" id="nav-accounts">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        </svg>
+        <span>Accounts</span>
+      </a>
+
+      <a href="#" class="nav-link" data-section="transactions" id="nav-transactions">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        <span>Transactions</span>
+      </a>
+
+      <a href="#" class="nav-link" data-section="analytics" id="nav-analytics">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <span>Analytics</span>
+      </a>
+
+      <div class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 px-3 mt-5 mb-3">Account</div>
+
+      <a href="#" class="nav-link" data-section="settings" id="nav-settings">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- Quick Transfer CTA -->
+    <div class="p-4 border-t border-navy-800">
+      <button id="openTransferBtn"
+        class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-semibold hover:from-emerald-500 hover:to-emerald-400 transition-all duration-200 shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-95">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+        </svg>
+        Quick Transfer
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN AREA ══════════ -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- ── TOP BAR ── -->
+    <header class="topbar-glass flex items-center justify-between px-6 py-3.5 border-b border-navy-800 flex-shrink-0 z-30">
+
+      <div class="flex items-center gap-4">
+        <button id="sidebarToggle" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-navy-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+        </button>
+        <div>
+          <h1 class="text-base font-semibold text-white" id="pageHeading">Dashboard</h1>
+          <p class="text-xs text-slate-500" id="pageSubheading">Good morning, MD Ziauddin 👋</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Balance toggle -->
+        <button id="balanceToggle" title="Show/hide balances"
+          class="p-2 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-navy-800 transition-colors">
+          <svg id="eyeIconShow" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+          <svg id="eyeIconHide" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+          </svg>
+        </button>
+
+        <!-- Notification bell -->
+        <button class="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-navy-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-crimson-500 rounded-full ring-2 ring-navy-900"></span>
+        </button>
+
+        <!-- Profile -->
+        <div class="flex items-center gap-2.5 pl-3 border-l border-navy-800">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center text-xs font-bold text-white ring-2 ring-navy-800">MZ</div>
+          <div class="hidden sm:block">
+            <div class="text-sm font-semibold text-white leading-tight">MD Ziauddin</div>
+            <div class="text-xs text-slate-500">Premium Member</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── SCROLLABLE CONTENT ── -->
+    <main class="flex-1 overflow-y-auto custom-scroll" id="mainContent">
+
+      <!-- ════════════════════════════
+           SECTION: DASHBOARD
+      ════════════════════════════ -->
+      <section id="section-dashboard" class="page-section p-6 space-y-6">
+
+        <!-- Hero row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          <!-- Net Worth Card (large) -->
+          <div class="md:col-span-2 card-glass rounded-2xl p-6 relative overflow-hidden hero-card">
+            <div class="hero-glow-orb"></div>
+            <div class="relative z-10">
+              <div class="flex items-start justify-between mb-4">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Total Net Worth</p>
+                  <div class="flex items-baseline gap-2 mt-1">
+                    <span class="text-4xl font-extrabold text-white balance-value" id="heroNetWorth">—</span>
+                    <span class="text-sm text-emerald-400 font-semibold flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                      </svg>
+                      <span id="heroNetWorthPct">3.2%</span>
+                    </span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1">Across all accounts</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Income / Expense inline -->
+              <div class="flex gap-5 mt-4 pt-4 border-t border-white/5">
+                <div>
+                  <p class="text-xs text-slate-500 mb-1">Monthly Income</p>
+                  <p class="text-xl font-bold text-emerald-400 balance-value" id="heroIncome">—</p>
+                </div>
+                <div class="w-px bg-white/5"></div>
+                <div>
+                  <p class="text-xs text-slate-500 mb-1">Monthly Expenses</p>
+                  <p class="text-xl font-bold text-crimson-400 balance-value" id="heroExpenses">—</p>
+                </div>
+                <div class="w-px bg-white/5"></div>
+                <div>
+                  <p class="text-xs text-slate-500 mb-1">Net Savings</p>
+                  <p class="text-xl font-bold text-violet-400 balance-value" id="heroSavings">—</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Savings Rate Card -->
+          <div class="card-glass rounded-2xl p-6 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+              <p class="text-xs font-semibold uppercase tracking-widest text-slate-400">Savings Rate</p>
+              <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium">This Month</span>
+            </div>
+            <div class="text-center my-2">
+              <div class="relative inline-flex items-center justify-center">
+                <svg class="savings-ring w-28 h-28 -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="15.9155" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2.5"/>
+                  <circle id="savingsRingCircle" cx="18" cy="18" r="15.9155" fill="none"
+                    stroke="url(#ringGradient)" stroke-width="2.5"
+                    stroke-dasharray="0 100" stroke-linecap="round" class="transition-all duration-1000"/>
+                  <defs>
+                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:#10b981"/>
+                      <stop offset="100%" style="stop-color:#8b5cf6"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span class="text-2xl font-extrabold text-white" id="savingsRatePct">—</span>
+                  <span class="text-xs text-slate-500">saved</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 text-center">Based on income vs expenses</p>
+          </div>
+        </div>
+
+        <!-- Accounts Grid -->
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">My Accounts</h2>
+            <a href="#" class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-medium" data-section="accounts">View All →</a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="dashAccountCards">
+            <!-- Injected by JS -->
+            <div class="skeleton-card h-36 rounded-2xl"></div>
+            <div class="skeleton-card h-36 rounded-2xl"></div>
+            <div class="skeleton-card h-36 rounded-2xl"></div>
+          </div>
+        </div>
+
+        <!-- Analytics Preview + Recent Transactions -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+
+          <!-- Doughnut Chart -->
+          <div class="lg:col-span-2 card-glass rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-semibold text-slate-300">Spending Breakdown</h2>
+              <span class="text-xs bg-navy-800 text-slate-400 border border-navy-700 px-2 py-0.5 rounded-full">This Month</span>
+            </div>
+            <div class="relative h-44">
+              <canvas id="doughnutChart"></canvas>
+            </div>
+            <div class="mt-3 space-y-1.5" id="doughnutLegend">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <!-- Recent Transactions -->
+          <div class="lg:col-span-3 card-glass rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-semibold text-slate-300">Recent Activity</h2>
+              <a href="#" class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-medium" data-section="transactions">View All →</a>
+            </div>
+            <div id="recentTxContainer" class="space-y-0">
+              <!-- Injected by JS -->
+              <div class="skeleton-row"></div>
+              <div class="skeleton-row"></div>
+              <div class="skeleton-row"></div>
+              <div class="skeleton-row"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ════════════════════════════
+           SECTION: ACCOUNTS
+      ════════════════════════════ -->
+      <section id="section-accounts" class="page-section hidden p-6 space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5" id="accountsPageGrid">
+          <!-- Injected by JS -->
+          <div class="skeleton-card h-52 rounded-2xl"></div>
+          <div class="skeleton-card h-52 rounded-2xl"></div>
+          <div class="skeleton-card h-52 rounded-2xl"></div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════
+           SECTION: TRANSACTIONS
+      ════════════════════════════ -->
+      <section id="section-transactions" class="page-section hidden p-6">
+        <div class="card-glass rounded-2xl overflow-hidden">
+          <!-- Toolbar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 p-5 border-b border-navy-800">
+            <!-- Filter tabs -->
+            <div class="flex gap-1 bg-navy-900 p-1 rounded-xl">
+              <button class="tx-filter-btn active" data-filter="all">All</button>
+              <button class="tx-filter-btn" data-filter="CREDIT">Income</button>
+              <button class="tx-filter-btn" data-filter="DEBIT">Expense</button>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <!-- Category filter -->
+              <select id="categoryFilter" class="select-dark text-sm">
+                <option value="">All Categories</option>
+                <option value="Salary">Salary</option>
+                <option value="Rent">Rent</option>
+                <option value="Food">Food</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Interest">Interest</option>
+                <option value="Transfer">Transfer</option>
+              </select>
+              <!-- Search -->
+              <div class="relative">
+                <svg class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="txSearch" placeholder="Search transactions…"
+                  class="input-dark pl-9 w-52 text-sm" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-navy-800">
+                  <th class="th-cell">Date</th>
+                  <th class="th-cell">Description</th>
+                  <th class="th-cell">Category</th>
+                  <th class="th-cell">Account</th>
+                  <th class="th-cell text-right">Amount</th>
+                  <th class="th-cell text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody id="txTableBody">
+                <tr><td colspan="6" class="py-16 text-center text-slate-500 text-sm">Loading transactions…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="px-5 py-3 border-t border-navy-800 flex items-center justify-between text-xs text-slate-500">
+            <span id="txCount">0 transactions</span>
+            <span id="txTotals"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════
+           SECTION: ANALYTICS
+      ════════════════════════════ -->
+      <section id="section-analytics" class="page-section hidden p-6 space-y-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Doughnut Chart (full) -->
+          <div class="card-glass rounded-2xl p-6">
+            <h2 class="text-sm font-semibold text-slate-300 mb-5">Monthly Spending by Category</h2>
+            <div class="h-64 relative">
+              <canvas id="doughnutChartFull"></canvas>
+            </div>
+            <div class="mt-4 space-y-2" id="doughnutLegendFull"></div>
+          </div>
+
+          <!-- Bar Chart (Cashflow) -->
+          <div class="card-glass rounded-2xl p-6">
+            <h2 class="text-sm font-semibold text-slate-300 mb-5">Income vs Expense – Cashflow</h2>
+            <div class="h-64 relative">
+              <canvas id="barChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spending breakdown bars -->
+        <div class="card-glass rounded-2xl p-6">
+          <h2 class="text-sm font-semibold text-slate-300 mb-4">Spending Breakdown</h2>
+          <div id="spendBars" class="space-y-3"><!-- Injected --></div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════
+           SECTION: SETTINGS
+      ════════════════════════════ -->
+      <section id="section-settings" class="page-section hidden p-6">
+        <div class="card-glass rounded-2xl p-6 max-w-lg">
+          <h2 class="text-sm font-semibold text-slate-300 mb-5">Preferences</h2>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between py-3 border-b border-navy-800">
+              <div>
+                <p class="text-sm font-medium text-white">Balance Visibility</p>
+                <p class="text-xs text-slate-500 mt-0.5">Show or hide account balances globally</p>
+              </div>
+              <button id="settingsBalToggle" class="toggle-btn active"></button>
+            </div>
+            <div class="flex items-center justify-between py-3 border-b border-navy-800">
+              <div>
+                <p class="text-sm font-medium text-white">Transaction Notifications</p>
+                <p class="text-xs text-slate-500 mt-0.5">Receive alerts for every transaction</p>
+              </div>
+              <button class="toggle-btn active"></button>
+            </div>
+            <div class="flex items-center justify-between py-3 border-b border-navy-800">
+              <div>
+                <p class="text-sm font-medium text-white">Two-Factor Authentication</p>
+                <p class="text-xs text-slate-500 mt-0.5">Secure your account with 2FA</p>
+              </div>
+              <button class="toggle-btn"></button>
+            </div>
+            <div class="flex items-center justify-between py-3">
+              <div>
+                <p class="text-sm font-medium text-white">Marketing Emails</p>
+                <p class="text-xs text-slate-500 mt-0.5">Receive promotions and updates</p>
+              </div>
+              <button class="toggle-btn"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- end main area -->
+</div><!-- end app shell -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     QUICK TRANSFER MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="transferModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-panel">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-lg font-bold text-white" id="modalTitle">Quick Transfer</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Move funds between your accounts securely</p>
+      </div>
+      <button id="closeModalBtn" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-navy-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form id="transferForm" novalidate class="space-y-4">
+
+      <div class="grid grid-cols-2 gap-3">
+        <!-- From -->
+        <div>
+          <label class="form-label" for="fromAccount">From Account</label>
+          <select id="fromAccount" class="select-dark w-full mt-1" required></select>
+        </div>
+        <!-- To -->
+        <div>
+          <label class="form-label" for="toAccount">To Account</label>
+          <select id="toAccount" class="select-dark w-full mt-1" required></select>
+        </div>
+      </div>
+
+      <!-- Recipient (UPI / External) -->
+      <div>
+        <label class="form-label" for="recipientField">Recipient Account / UPI ID</label>
+        <input type="text" id="recipientField" class="input-dark w-full mt-1"
+          placeholder="user@bank or account number" />
+        <p class="text-xs text-slate-600 mt-1">Optional for internal transfers between your accounts above.</p>
+      </div>
+
+      <!-- Amount + Note -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="form-label" for="transferAmount">Amount (USD)</label>
+          <div class="relative mt-1">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">$</span>
+            <input type="number" id="transferAmount" class="input-dark w-full pl-7"
+              placeholder="0.00" min="0.01" step="0.01" required />
+          </div>
+        </div>
+        <div>
+          <label class="form-label" for="transferNote">Note</label>
+          <input type="text" id="transferNote" class="input-dark w-full mt-1"
+            placeholder="Optional note…" maxlength="80" />
+        </div>
+      </div>
+
+      <!-- Balance preview -->
+      <div id="transferPreview" class="hidden bg-navy-900 rounded-xl p-4 border border-navy-700 space-y-2">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Preview</p>
+        <div class="flex justify-between text-sm">
+          <span class="text-slate-400">From balance after</span>
+          <span id="previewFrom" class="font-semibold text-crimson-400"></span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-slate-400">To balance after</span>
+          <span id="previewTo" class="font-semibold text-emerald-400"></span>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div id="transferError" class="hidden bg-crimson-500/10 border border-crimson-500/30 text-crimson-400 text-sm px-4 py-3 rounded-xl"></div>
+
+      <!-- Buttons -->
+      <div class="flex gap-3 pt-1">
+        <button type="button" id="cancelTransferBtn"
+          class="flex-1 py-2.5 rounded-xl border border-navy-700 text-slate-300 text-sm font-medium hover:bg-navy-800 transition-colors">
+          Cancel
+        </button>
+        <button type="submit" id="transferSubmitBtn"
+          class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-semibold hover:from-emerald-500 hover:to-emerald-400 transition-all duration-200 shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 active:scale-95">
+          <span id="transferBtnLabel">Send Transfer</span>
+          <svg id="transferSpinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TOAST NOTIFICATIONS
+═══════════════════════════════════════════════════════════════ -->
+<div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 items-end pointer-events-none"></div>
+
+<!-- App JS -->
+<script src="js/app.js"></script>
+</body>
+</html>
