@@ -40,12 +40,55 @@
   </script>
 </head>
 
-<body class="bg-navy-900 text-slate-100 font-sans antialiased overflow-hidden">
+<body class="bg-navy-900 text-slate-100 font-sans antialiased overflow-hidden relative">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LOGIN OVERLAY
+═══════════════════════════════════════════════════════════════ -->
+<div id="authOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-navy-900 overflow-hidden">
+  <div class="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-emerald-500/10 blur-[120px] mix-blend-screen opacity-70 animate-pulse-slow pointer-events-none"></div>
+  <div class="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-violet-600/10 blur-[130px] mix-blend-screen opacity-60 pointer-events-none"></div>
+
+  <div class="card-glass rounded-3xl p-10 w-full max-w-md relative z-10 shadow-2xl flex flex-col mx-4">
+    <div class="flex items-center gap-3 mb-8 justify-center">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-violet-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+        <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h10M3 18h10" />
+        </svg>
+      </div>
+      <div class="text-2xl font-bold tracking-tight text-white">NexaBank</div>
+    </div>
+    
+    <h2 class="text-lg font-semibold text-center text-white mb-6">Welcome Back</h2>
+    
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="form-label" for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" class="input-dark w-full mt-1" placeholder="admin" required value="admin" />
+      </div>
+      <div>
+        <label class="form-label" for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" class="input-dark w-full mt-1" placeholder="••••••••" required value="password" />
+      </div>
+      <button type="submit" class="w-full py-3 mt-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold hover:from-emerald-500 hover:to-emerald-400 transition-all shadow-lg shadow-emerald-500/25">
+        Log In
+      </button>
+    </form>
+    <p class="text-xs text-center text-slate-500 mt-6">Demo mode: Just click Log In</p>
+  </div>
+</div>
+
+<!-- Ambient Background Glows -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+  <div class="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-emerald-500/10 blur-[120px] mix-blend-screen opacity-70 animate-pulse-slow"></div>
+  <div class="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-violet-600/10 blur-[130px] mix-blend-screen opacity-60"></div>
+  <div class="absolute -bottom-[20%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-amber-500/5 blur-[100px] mix-blend-screen opacity-50"></div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════════════
      APP SHELL
 ═══════════════════════════════════════════════════════════════ -->
-<div class="flex h-screen">
+<div id="appShell" class="flex h-screen relative z-10 hidden opacity-0 transition-opacity duration-500">
 
   <!-- ══════════ SIDEBAR ══════════ -->
   <aside id="sidebar"
@@ -133,7 +176,7 @@
         </button>
         <div>
           <h1 class="text-base font-semibold text-white" id="pageHeading">Dashboard</h1>
-          <p class="text-xs text-slate-500" id="pageSubheading">Good morning, MD Ziauddin 👋</p>
+          <p class="text-xs text-slate-500" id="pageSubheading">Good morning, <span id="welcomeName">MD Ziauddin</span> 👋</p>
         </div>
       </div>
 
@@ -160,12 +203,18 @@
 
         <!-- Profile -->
         <div class="flex items-center gap-2.5 pl-3 border-l border-navy-800">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center text-xs font-bold text-white ring-2 ring-navy-800">MZ</div>
+          <div id="profileInitials" class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-emerald-500 flex items-center justify-center text-xs font-bold text-white ring-2 ring-navy-800">MZ</div>
           <div class="hidden sm:block">
-            <div class="text-sm font-semibold text-white leading-tight">MD Ziauddin</div>
+            <div id="profileName" class="text-sm font-semibold text-white leading-tight">MD Ziauddin</div>
             <div class="text-xs text-slate-500">Premium Member</div>
           </div>
         </div>
+        <!-- Logout -->
+        <button id="logoutBtn" title="Log Out" class="p-2 ml-1 rounded-lg text-slate-400 hover:text-crimson-400 hover:bg-navy-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -266,6 +315,28 @@
             <div class="skeleton-card h-36 rounded-2xl"></div>
             <div class="skeleton-card h-36 rounded-2xl"></div>
             <div class="skeleton-card h-36 rounded-2xl"></div>
+          </div>
+        </div>
+
+        <!-- Financial Insights -->
+        <div class="card-glass rounded-2xl p-6 mt-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Financial Insights & Tips</h2>
+            <span class="text-xs bg-violet-500/10 text-violet-400 border border-violet-500/20 px-2 py-0.5 rounded-full font-medium">Daily Update</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-navy-900/50 rounded-xl p-4 border border-white/5">
+              <h3 class="text-emerald-400 font-semibold text-sm mb-1">Market Trend</h3>
+              <p class="text-xs text-slate-400">NIFTY 50 is up by 1.2% today. Strong growth in banking and IT sectors.</p>
+            </div>
+            <div class="bg-navy-900/50 rounded-xl p-4 border border-white/5">
+              <h3 class="text-amber-400 font-semibold text-sm mb-1">Savings Tip</h3>
+              <p class="text-xs text-slate-400">Consider moving 20% of your idle checking balance to a high-yield Fixed Deposit.</p>
+            </div>
+            <div class="bg-navy-900/50 rounded-xl p-4 border border-white/5">
+              <h3 class="text-violet-400 font-semibold text-sm mb-1">Expense Alert</h3>
+              <p class="text-xs text-slate-400">Your dining expenses are 15% higher this month compared to last month.</p>
+            </div>
           </div>
         </div>
 
@@ -502,9 +573,9 @@
       <!-- Amount + Note -->
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="form-label" for="transferAmount">Amount (USD)</label>
+          <label class="form-label" for="transferAmount">Amount (INR)</label>
           <div class="relative mt-1">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">$</span>
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">₹</span>
             <input type="number" id="transferAmount" class="input-dark w-full pl-7"
               placeholder="0.00" min="0.01" step="0.01" required />
           </div>

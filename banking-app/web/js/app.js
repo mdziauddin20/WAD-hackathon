@@ -45,9 +45,9 @@ const MOCK = {
       Entertainment:   26.98,
     },
     accounts: [
-      { id:'acc1', accountNumber:'4521-8800-0012-3456', accountType:'Checking',    balance:12450.75, currency:'USD' },
-      { id:'acc2', accountNumber:'4521-8800-0012-7890', accountType:'Savings',     balance:38920.00, currency:'USD' },
-      { id:'acc3', accountNumber:'5412-7534-0098-1122', accountType:'Credit Card', balance:-2340.50, currency:'USD' },
+      { id:'acc1', accountNumber:'4521-8800-0012-3456', accountType:'Checking',    balance:12450.75, currency:'INR' },
+      { id:'acc2', accountNumber:'4521-8800-0012-7890', accountType:'Savings',     balance:38920.00, currency:'INR' },
+      { id:'acc3', accountNumber:'5412-7534-0098-1122', accountType:'Credit Card', balance:-2340.50, currency:'INR' },
     ],
   },
 
@@ -184,7 +184,7 @@ const API = {
         description: (note || 'Transfer') + ' (received)', amount,
       });
 
-      return { success: true, message: `Transferred $${amount.toFixed(2)} successfully.`, fromBalance: from.balance, toBalance: to.balance };
+      return { success: true, message: `Transferred ₹${amount.toFixed(2)} successfully.`, fromBalance: from.balance, toBalance: to.balance };
     }
   },
 };
@@ -195,13 +195,13 @@ const API = {
 
 const FMT = {
   /**
-   * Format a number as USD currency.
+   * Format a number as INR currency.
    * @param {number} amount
    * @param {boolean} showSign – prefix + for positive values
    */
   currency(amount, showSign = false) {
     const abs = Math.abs(amount);
-    const str = abs.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const str = abs.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
     if (showSign) return amount < 0 ? `−${str}` : `+${str}`;
     return amount < 0 ? `−${str}` : str;
   },
@@ -472,7 +472,7 @@ function buildBarChart(summary) {
         x: { grid: { display: false }, ticks: { color: '#475569' } },
         y: {
           grid:  { color: 'rgba(255,255,255,0.04)' },
-          ticks: { color: '#475569', callback: v => '$' + (v/1000).toFixed(0) + 'k' },
+          ticks: { color: '#475569', callback: v => '₹' + (v/1000).toFixed(0) + 'k' },
         },
       },
     },
@@ -1059,6 +1059,74 @@ function bindEvents() {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeTransferModal();
   });
+
+  setupAuth();
+}
+
+/** Setup authentication interactions (Login/Logout) */
+function setupAuth() {
+  const loginForm = document.getElementById('loginForm');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const authOverlay = document.getElementById('authOverlay');
+  const appShell = document.getElementById('appShell');
+
+  function updateUserName(name) {
+    if (!name) return;
+    const capitalized = name.charAt(0).toUpperCase() + name.slice(1);
+    const initials = capitalized.substring(0, 2).toUpperCase();
+    
+    const welcomeName = document.getElementById('welcomeName');
+    const profileName = document.getElementById('profileName');
+    const profileInitials = document.getElementById('profileInitials');
+    
+    if (welcomeName) welcomeName.textContent = capitalized;
+    if (profileName) profileName.textContent = capitalized;
+    if (profileInitials) profileInitials.textContent = initials;
+  }
+
+  // Check if logged in already (sessionStorage)
+  if (sessionStorage.getItem('isLoggedIn') === 'true') {
+    authOverlay.classList.add('hidden');
+    appShell.classList.remove('hidden');
+    setTimeout(() => appShell.classList.remove('opacity-0'), 50);
+    const savedName = sessionStorage.getItem('username');
+    if (savedName) updateUserName(savedName);
+  }
+
+  // Handle Login
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      sessionStorage.setItem('isLoggedIn', 'true');
+      
+      const usernameInput = document.getElementById('loginUsername').value;
+      sessionStorage.setItem('username', usernameInput);
+      updateUserName(usernameInput);
+      
+      authOverlay.classList.add('opacity-0');
+      setTimeout(() => {
+        authOverlay.classList.add('hidden');
+        appShell.classList.remove('hidden');
+        setTimeout(() => appShell.classList.remove('opacity-0'), 50);
+        showToast(`Welcome back, ${updateUserName(usernameInput) || usernameInput}!`, 'success');
+      }, 300);
+    });
+  }
+
+  // Handle Logout
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('isLoggedIn');
+      
+      appShell.classList.add('opacity-0');
+      setTimeout(() => {
+        appShell.classList.add('hidden');
+        authOverlay.classList.remove('hidden');
+        setTimeout(() => authOverlay.classList.remove('opacity-0'), 50);
+        showToast('Logged out successfully.', 'info');
+      }, 300);
+    });
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
